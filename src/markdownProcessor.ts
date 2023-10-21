@@ -184,7 +184,17 @@ function removeBlogSuffix(mainFolder: string): string {
 
 function removeNumberPrefix(str: string): string {
     // Removes all common numbering styles: 1), 1., 1 -, ...
-    return str.replace(/^\d+[\.\-\)\s%20]*\s*/, "").trim();
+    const ignoredPrefixPattern = /^\d+[-_.]\d+/;
+
+    const numberPrefixPattern = /^(?<numberPrefix>\d+)\s*[-_.]+\s*(?<suffix>[^-_.\s].*)$/;
+    
+    if (ignoredPrefixPattern.test(str)) {
+        return str;
+    }
+    
+    const match = numberPrefixPattern.exec(str);
+
+    return match?.groups?.suffix ?? str;
 }
 
 function getOrCreateSize(sizes: Size[], size: string, processedFileName: string): Size {
