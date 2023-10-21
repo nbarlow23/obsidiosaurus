@@ -157,6 +157,16 @@ function processUrlParts(urlParts: string[], isBlog: boolean): string[] {
             : removeNumberPrefix(parentFolder);
     } else if (file.endsWith(".md")) {
         urlParts[urlParts.length - 1] = file.replace(".md", "");
+
+        const eligibleDocIndexNames = [
+            "index",
+            "readme",
+            parentFolder.toLowerCase(),
+        ];
+
+        if (eligibleDocIndexNames.includes(urlParts[urlParts.length - 1].toLowerCase())) {
+            urlParts.pop();
+        }
     }
 
     if (isBlog) {
